@@ -1,7 +1,7 @@
 import { handlerPath } from '@libs/handler-resolver';
 
 export const importFileParser = {
-  handler: `${handlerPath(__dirname)}/handler.main`,
+  handler: `${handlerPath(__dirname)}/handler.importFileParser`,
   events: [
     {
       s3: {
@@ -14,7 +14,6 @@ export const importFileParser = {
 				],
 				existing: true,
 				forceDeploy: true,
-				cors: true,
       },
     },
   ],
