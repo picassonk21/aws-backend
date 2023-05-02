@@ -1,13 +1,19 @@
 import { handlerPath } from '@libs/handler-resolver';
 
-export default {
+export const importProductsFile = {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
     {
       http: {
         method: 'get',
-        path: 'products',
-        request: {},
+        path: 'import',
+        request: {
+					parameters: {
+						querystrings: {
+							name: true
+						},
+					}
+        },
 				cors: true,
       },
     },

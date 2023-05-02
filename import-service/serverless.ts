@@ -1,15 +1,15 @@
 import type { AWS } from '@serverless/typescript';
 
-import { getProductList, getProductById, createProduct } from '@functions/index';
+import { importProductsFile } from '@functions/importProductsFile';
+import { importFileParser } from '@functions/importFileParser';
 
 const serverlessConfiguration: AWS = {
-  service: 'product-service',
+  service: 'import-service',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild', 'serverless-auto-swagger'],
+  plugins: ['serverless-esbuild'],
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
-		region: 'eu-west-1',
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -17,20 +17,19 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-			PRODUCTS_TABLE: 'aws_cloudfront_products',
-			STOCK_TABLE: 'aws_cloudfront_stock'
     },
 		iam: {
 			role: {
 				statements: [{
 					'Effect': 'Allow',
-					'Action': ['dynamodb:Query', 'dynamodb:Scan', 'dynamodb:GetItem', 'dynamodb:PutItem'],
+					'Action': ['s3:*'],
 					'Resource': '*'
 				}]
 			}
 		}
   },
-  functions: { getProductList, getProductById, createProduct },
+  // import the function via paths
+  functions: { importProductsFile, importFileParser },
   package: { individually: true },
   custom: {
     esbuild: {
